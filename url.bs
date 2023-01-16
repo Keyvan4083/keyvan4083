@@ -3361,10 +3361,10 @@ interface URLSearchParams {
   constructor(optional (sequence&lt;sequence&lt;USVString>> or record&lt;USVString, USVString> or USVString) init = "");
 
   undefined append(USVString name, USVString value);
-  undefined delete(USVString name);
+  undefined delete(USVString name, optional USVString value);
   USVString? get(USVString name);
   sequence&lt;USVString> getAll(USVString name);
-  boolean has(USVString name);
+  boolean has(USVString name, optional USVString value);
   undefined set(USVString name, USVString value);
 
   undefined sort();
@@ -3494,10 +3494,15 @@ method steps are:
  <li><p><a for=URLSearchParams>Update</a> <a>this</a>.
 </ol>
 
-<p>The <dfn method for=URLSearchParams><code>delete(<var>name</var>)</code></dfn> method steps are:
+<p>The <dfn method for=URLSearchParams><code>delete(<var>name</var>, <var>value</var>)</code></dfn>
+method steps are:
 
 <ol>
- <li><p><a for=list>Remove</a> all <a for=/>tuples</a> whose name is <var>name</var> from
+ <li><p>If <var>value</var> is given, then <a for=list>remove</a> all <a for=/>tuples</a> whose name
+ is <var>name</var> and value is <var>value</var> from <a>this</a>'s
+ <a for=URLSearchParams>list</a>.
+
+ <li><p>Otherwise, <a for=list>remove</a> all <a for=/>tuples</a> whose name is <var>name</var> from
  <a>this</a>'s <a for=URLSearchParams>list</a>.
 
  <li><p><a for=URLSearchParams>Update</a> <a>this</a>.
@@ -3511,9 +3516,18 @@ return the value of the first <a for=/>tuple</a> whose name is <var>name</var> i
 to return the values of all <a for=/>tuples</a> whose name is <var>name</var> in <a>this</a>'s
 <a for=URLSearchParams>list</a>, in list order; otherwise the empty sequence.
 
-<p>The <dfn method for=URLSearchParams><code>has(<var>name</var>)</code></dfn> method steps are to
-return true if there is a <a for=/>tuple</a> whose name is <var>name</var> in <a>this</a>'s
-<a for=URLSearchParams>list</a>; otherwise false.
+<p>The <dfn method for=URLSearchParams><code>has(<var>name</var>, <var>value</var>)</code></dfn>
+method steps are:
+
+<ol>
+ <li><p>If <var>value</var> is given and there is a <a for=/>tuple</a> whose name is <var>name</var>
+ and value is <var>value</var> in <a>this</a>'s <a for=URLSearchParams>list</a>, then return true.
+
+ <li><p>If <var>value</var> is not given and there is a <a for=/>tuple</a> whose name is
+ <var>name</var> in <a>this</a>'s <a for=URLSearchParams>list</a>, then return true.
+
+ <li><p>Return false.
+</ol>
 
 <p>The <dfn method for=URLSearchParams><code>set(<var>name</var>, <var>value</var>)</code></dfn>
 method steps are:
@@ -3611,6 +3625,7 @@ Bobby Holley,
 Boris Zbarsky,
 Brad Hill,
 Brandon Ross,
+Cailyn Hansen,
 Chris Dumez,
 Chris Rebert,
 Corey Farwell,
